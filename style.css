@@ -33,8 +33,27 @@ label {
   padding: 20px;
 }
 
-#capoPlacement {
+#capoPlacement,
+#tuningtype {
   padding: 15px;
   font-size: 30px;
   text-align: center;
+  border-radius: 15px;
+}
+
+.transpose {
+  cursor: pointer;
+  padding: 10px;
+  margin: 30px;
+  font-size: 2rem;
+  border-radius: 10px;
+  border: 0px;
+}
+
+.transpose:active {
+  transform: scale(0.98);
+}
+
+.notes {
+  font-size: 25px;
 }

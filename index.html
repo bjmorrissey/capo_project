@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,28 +12,29 @@
     <title>Guitar Capo Project</title>
 </head>
 
-    <h1>Guitar Capo Project</h1>
-    <label id='capoPlacement'>What fret would you like to place your capo?  </label>
-   <input type="number" min="0" max="12" placeholder='number here' id='capoPlacement'></input>
-   <label id='capoPlacement'>What tuning are you using? : </label>
-   <select id="tuningtype" >
-       <option value="standard">Standard Tuning</option>
-       <option value="dadgad">DADGAD Tuning</option>
-       <option value="doubleD">Double D Tuning</option>
-       <option value="openD">Open D Tuning</option>
-       <option value="openE">Open E Tuning</option>
-       <option value="openG">Open G Tuning</option>
-       <option value="openA">Open A Tuning</option>
-       <option value="rainSong">Rain Song (Zepp) Tuning</option>
-       <option value="openC">Open C Tuning</option>
-       <option value="openCsix">Open C6 Tuning</option>
-       
-   </select>
-<br/>
-   <div class="notes">
-       Here is the Notes area
-   </div>
-    <script src="script.js" defer></script>
+<h1>Guitar Capo Project</h1>
+<label>What fret would you like to place your capo? </label>
+<input type="number" min="0" max="12" placeholder='0' id='capoPlacement'></input>
+<label id='capoPlacement'>What tuning are you using? : </label>
+<select id="tuningtype" value="standard">
+    <option value="standard">Standard Tuning</option>
+    <option value="dadgad">DADGAD Tuning</option>
+    <option value="doubleD">Double D Tuning</option>
+    <option value="openD">Open D Tuning</option>
+    <option value="openE">Open E Tuning</option>
+    <option value="openG">Open G Tuning</option>
+    <option value="openA">Open A Tuning</option>
+    <option value="rainSong">Rain Song (Zepp) Tuning</option>
+    <option value="openC">Open C Tuning</option>
+    <option value="openCsix">Open C6 Tuning</option>
+
+</select>
+<button class="transpose">Click to transpose</button>
+<div class="notes">
+    Here is the Notes area
+</div>
+<script src="script.js" defer></script>
 
 </body>
+
 </html>
