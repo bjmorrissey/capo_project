@@ -57,3 +57,78 @@ label {
 .notes {
   font-size: 25px;
 }
+
+
+#guitarneck{
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  justify-content: start;
+  border: 2px white solid; 
+  
+  
+}
+
+#guitarneck .opennotes {
+  font-size: 26px; 
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-between;
+  padding: 5px; 
+  width: 100%; 
+}
+
+.opennotes ul {
+  list-style: none;
+  display: flex; 
+  background-color:darkgray;
+  justify-content: space-between;
+}
+
+.opennotes ul li {
+  margin: 5px; 
+
+}
+
+#guitarneck .fretboard {
+  background-color: saddlebrown;
+  height: 100%;
+}
+
+.fretboard .fret {
+  background-color: saddlebrown;
+  font-size: 16px; 
+  padding: 5px;
+  /* margin: 0 0 5px 0; */
+}
+
+.fret ul {
+  list-style: none;
+  display: flex; 
+  justify-content: space-between
+}
+
+.fret ul li {
+  /* margin: 5px;  */
+  padding: 5px; 
+  /* border: 1px solid red; */
+}
+
+.inlay {
+  width: 20px; 
+  height: 20px; 
+  background-color: rgba(255,255,255, .3);
+  border-radius: 10px;
+  align-items: center;
+  
+
+}
+.fretwire {
+  width: 100%; 
+  height: 5px; 
+  background-color: silver;
+}
+
+.hidden {
+  visibility: hidden;
+  }
