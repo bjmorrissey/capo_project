@@ -12,10 +12,18 @@
     <title>Guitar Capo Project</title>
 </head>
 
-<h1>Guitar Capo Project</h1>
-<label>What fret would you like to place your capo? </label>
-<input type="number" min="0" max="12" placeholder='0' id='capoPlacement'></input>
+<h1>Capo Calculator</h1>
+
+<div class="intro">
+    <p>What is a <a href="https://en.wikipedia.org/wiki/Capo" target="_blank">capo</a>? It's a common tool for guitarists to transpose and shorten the playable length of the strings - hence raising the pitch. Thanks Wikipedia!</p>
+    <p>This tool was developed to help people by entering a list of chords so they can play together using different voicings. Try it out!</p>
+</div>
+<!-- <label>What fret would you like to place your capo? </label>
+<input type="number" min="0" max="12" placeholder='0' id='capoPlacement' value='0'></input>
 <label id='capoPlacement'>What tuning are you using? : </label>
+
+
+
 <select id="tuningtype" value="standard">
     <option value="standard">Standard Tuning</option>
     <option value="dadgad">DADGAD Tuning</option>
@@ -29,12 +37,12 @@
     <option value="openCsix">Open C6 Tuning</option>
 
 </select>
+
+
 <button class="transpose">Click to transpose</button>
-<div class="notes">
+<div class="notes"></div>
 
-</div>
-
-<div id="guitarneck" class="hidden">
+<div id="guitarneck" >
     <div class="opennotes">
         Nut/capo placement
     </div>
@@ -52,15 +60,30 @@
         </div>
         <div class='fretwire'></div>
         <div class="fret fret5">
-
-
         </div>
-
-
-
-
     </div>
 
+</div> -->
+<div class="chordinput">
+    <h2>Type in a chord progression. Suggestions for capo placement will be shown below: </h2>
+    <input type='text' class="chords" placeholder='Type chord progression here. Place a comma between each chord'>
+    <button id='chordbtn'>Convert</button>
+    
+    <div class="chordexp">
+        <div class="capoChart">
+            <div class="charttitle">Conversion Chart</div>
+            <div class="capotitle">
+                <div class="capospot">Place capo here:</div>
+                <div class="chordtitle">Strum the following chords:</div>
+            </div>  
+            <div class="chart">
+
+            </div>
+            
+            
+        </div>
+
+    </div>
 </div>
 <script src="script.js" defer></script>
 
