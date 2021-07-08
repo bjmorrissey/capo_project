@@ -11,6 +11,9 @@ const capoChart = document.querySelector('.capoChart')
 const capoTitle = document.querySelector('.capotitle')
 const chart = document.querySelector('.chart')
 
+
+
+
 // const capoSelection = document.querySelectorAll('.capoSelection')
 let fretMap = [];
 let capoOneRec;
@@ -35,20 +38,7 @@ const notesRun = [
   'G#',
 ];
 
-const notesRunSharp = [
-  'A',
-  'A#',
-  'B',
-  'C',
-  'C#',
-  'D',
-  'D#',
-  'E',
-  'F',
-  'F#',
-  'G',
-  'G#',
-];
+
 
 const notesRunFlat = [
   'A',
@@ -70,42 +60,53 @@ const tunings = {
   'standard': {
     name: 'standard tuning',
     notes: ['E', 'A', 'D', 'G', 'B', 'E'],
+    freq: [82.41, 110, 146.84, 196, 246.96, 329.64]
   },
   dadgad: {
     name: 'DADGAD tuning',
     notes: ['D', 'A', 'D', 'G', 'A', 'D'],
+    freq: [73.42, 110, 146.84, 196, 220, 293.67]
   },
   doubleD: {
     name: 'double D tuning',
     notes: ['D', 'A', 'D', 'G', 'B', 'D'],
+    freq: [73.42, 110, 146.84, 196, 246.96, 293.67]
   },
   openD: {
     name: 'open D tuning',
     notes: ['D', 'A', 'D', 'F#', 'A', 'D'],
+    freq: [73.42, 110, 146.84, 185, 220, 293.67]
   },
   openE: {
     name: 'open E tuning',
     notes: ['E', 'B', 'E', 'G#', 'B', 'E'],
+    freq: [82.41, 123.47, 164.81, 207.65, 246.96, 329.64]
   },
   openG: {
     name: 'open G tuning',
     notes: ['D', 'G', 'D', 'G', 'B', 'D'],
+    freq: [73.42, 98, 146.84, 196, 246.95, 293.67]
+    
   },
   openA: {
     name: 'open A tuning',
     notes: ['E', 'A', 'E', 'A', 'C#', 'E'],
+    freq: [82.41, 110, 164.81, 220, 277.18, 329.64]
   },
   rainSong: {
     name: 'Rain Song tuning',
     notes: ['D', 'G', 'C', 'G', 'C', 'D'],
+    freq: [73.42, 98, 130.81, 196, 261.63, 293.67]
   },
   openCsix: {
     name: 'open C6 tuning',
     notes: ['C', 'A', 'C', 'G', 'C', 'E'],
+    freq: [65.41, 110, 130.81, 196, 261.63, 329.64]
   },
   openC: {
     name: 'open C tuning',
-    notes: ['C', 'G', 'C', 'G', 'G', 'E'],
+    notes: ['C', 'G', 'C', 'G', 'C', 'E'],
+    freq: [65.41, 98, 130.81, 196, 261.63, 329.64]
   },
 };
 let tuneChoice = tunings.standard;
@@ -117,7 +118,6 @@ const keys = {
   B: ['B', 'C#m', 'D#m', 'E', 'F#', 'G#m', 'A#dim'],
   Cb: ['Cb', 'Dbm', 'Ebm', 'Fb', 'Gb', 'Abm', 'Bbdim'],
   C: ['C', 'Dm', 'Ebm', 'F', 'G', 'Am', 'Bdim'],
-  // Cm: ['Cm', 'Ddim', 'Eb', 'Fm', 'Gm', 'Ab', 'Bb'],
   Db: ['Db', 'Ebm', 'Fm', 'Gb', 'Ab', 'Bbm', 'Cdim'],
   D: ['D', 'Em', 'F#m', 'G', 'A', 'Bm', 'C#dim'],
   Eb: ['Eb', 'Fm', 'Gm', 'Ab', 'Bb', 'Cm', 'Ddim'],
@@ -152,68 +152,103 @@ function capoLayout (tuning, placement) {
  return transcribedNotes;
 }
 
+let frequencies = []
+// take array of frequencies, transpose accdly
+function freqCalc (freq, placement, i) {
+  let mult = 1;
+  let st = 0;
+  i > 0 ? mult = 1.059463 ** i : 1;
+  placement > 0 ? st = 1.059463 ** placement : st = 1; 
+  let start = freq.map(fr => +(fr * st).toFixed(2))
+  let tempArr = start.map(fr => +(fr * mult).toFixed(2))
+  return tempArr;
+}  
+  
 let neck=[]
 function neckRun(tuning, placement, fretCount) {
   neck = []
   for (i=0; i<=fretCount; i++) {
     neck.push(capoLayout(tuning, placement+i))
+    frequencies.push(freqCalc(tuning.freq, placement, i))
+    
   }
+ 
 }
 
-function fretLayout (arr) {
-  let fretList = `<ul> ${arr.map(note => `<li>${note}</li>`)}</ul>`.replaceAll(',', '')
-  // console.log(fretList)
+function fretLayout (arr, freq) {
+  let fretList = `<ul> ${arr.map((note, i) => `<li class="note-sound" frequency="${freq[i]}">${note}</li>`)}</ul>`.replaceAll(',', '')
+ 
   return fretList;
+  
 }
+
   
 function printNeck() {
-  let neckMap = neck.map((fret, i) => `<div class="fret fret${i}">${fretLayout(neck[i])}</div><div class="fretwire"></div>`).join('')
+  let neckMap = neck.map((fret, i) => `<div class="fret fret${i}">${fretLayout(neck[i], frequencies[i])}</div><div class="fretwire"></div>`).join('')
   guitarNeck.innerHTML = neckMap;
   guitarNeck.style.visibility = 'visible';
+  const noteSound = document.querySelectorAll('.note-sound')
+
+  noteSound.forEach(note => {
+    let frequency = note.attributes.frequency.value
+    let counter = 0;
+    note.addEventListener('click', (e) => {
+      soundPlay(frequency, 'triangle', .5)
+      soundPlay(frequency, 'sine', .5)
+    })
+
+  })
+    
 }
 
 function capoExplanation (capoSpot, notes) {
   let end = '';
-  let desc = `If a capo were placed on the ${capoSpot}${end} fret, the notes would be ${notes}`;
+  let desc = ``;
   if (capoSpot >= 4) {
     end = 'th'
+    desc = `If a capo were placed on the ${capoSpot}${end} fret, the notes would be ${notes}.`;
   } else if (capoSpot === 3) {
     end = 'rd'
+    desc = `If a capo were placed on the ${capoSpot}${end} fret, the notes would be ${notes}.`;
   } else if (capoSpot === 2) {
     end = 'nd'
+    desc = `If a capo were placed on the ${capoSpot}${end} fret, the notes would be ${notes}.`;
   } else if (capoSpot === 1) {
     end = 'st'
+    desc = `If a capo were placed on the ${capoSpot}${end} fret, the notes would be ${notes}.`;
   } else {
     desc = `If no capo were used, the notes would be ${notes}.`
+   
   }
+  desc += `<p> Click below for an audio reference.</p>`
     notes2.innerHTML = desc;
 }
 
-// tuningtype.addEventListener('click', (e) => {
-//   tuneChoice = tuningtype.value
+tuningtype.addEventListener('click', (e) => {
+  tuneChoice = tuningtype.value
 
-//   if (tuneChoice === 'openCsix') {
-//     tuneChoice = tunings.openCsix
-//   } else if (tuneChoice === 'dadgad') {
-//     tuneChoice = tunings.dadgad
-//   } else if (tuneChoice === 'doubleD') {
-//     tuneChoice = tunings.doubleD
-//   } else if (tuneChoice === 'openD') {
-//     tuneChoice = tunings.openD
-//   } else if (tuneChoice === 'openE') {
-//     tuneChoice = tunings.openE
-//   } else if (tuneChoice === 'openG') {
-//     tuneChoice = tunings.openG
-//   } else if (tuneChoice === 'openA') {
-//     tuneChoice = tunings.openA
-//   } else if (tuneChoice === 'rainSong') {
-//     tuneChoice = tunings.rainSong
-//   } else if (tuneChoice === 'openC') {
-//     tuneChoice = tunings.openC
-//   } else {
-//     tuneChoice = tunings.standard
-//   };
-// });
+  if (tuneChoice === 'openCsix') {
+    tuneChoice = tunings.openCsix
+  } else if (tuneChoice === 'dadgad') {
+    tuneChoice = tunings.dadgad
+  } else if (tuneChoice === 'doubleD') {
+    tuneChoice = tunings.doubleD
+  } else if (tuneChoice === 'openD') {
+    tuneChoice = tunings.openD
+  } else if (tuneChoice === 'openE') {
+    tuneChoice = tunings.openE
+  } else if (tuneChoice === 'openG') {
+    tuneChoice = tunings.openG
+  } else if (tuneChoice === 'openA') {
+    tuneChoice = tunings.openA
+  } else if (tuneChoice === 'rainSong') {
+    tuneChoice = tunings.rainSong
+  } else if (tuneChoice === 'openC') {
+    tuneChoice = tunings.openC
+  } else {
+    tuneChoice = tunings.standard
+  };
+});
 
 function keyLookup(chords) {
   
@@ -252,9 +287,50 @@ function keycheck(key) {
   if (Object.values(key).includes('b')) {
     return notesRunFlat;
   } else {
-    return notesRunSharp;
+    return notesRun;
   }
 }
+
+//AudioContext testing
+
+let audioContext;
+
+function soundPlay(freq, waveType, gain) {
+  try {
+    audioContext = new(window.AudioContext || window.webkitAudioContext)();
+  } catch (error) {
+    window.alert(
+      `Sorry, but your browser doesn't support the Web Audio API!`
+    );
+  }
+  
+  if (audioContext !== undefined) {
+    const osc = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    const CT = audioContext.currentTime;
+    const noteLength = 3;
+    
+    // osc2.connect(osc)
+    osc.connect(gainNode)
+    
+    gainNode.connect(audioContext.destination);
+    
+    
+    gainNode.gain.value = gain;
+    
+    osc.type = waveType;
+    osc.frequency.setValueAtTime(freq, CT)
+    // osc.detune.exponentialRampToValueAtTime(-100, CT+.25)
+    gainNode.gain.exponentialRampToValueAtTime(0.001, CT + noteLength)
+  
+    osc.start();
+    osc.stop(CT + noteLength);
+      
+  }
+
+
+}
+
 
 
 //Suggests where to put capo based on key 
@@ -321,14 +397,7 @@ let capoObj = {
   [capoThreeRec]: chordChange(capoThreeRec),
   [capoFourRec]: chordChange(capoFourRec)
   }
-// delete capoObj[0];
-// delete capoObj[-1]
 
-// for (i=0; i< capoObj.length; i--) {
-//   if (Object.keys(capoObj) < 0){
-//     delete capoObj[i]
-//   }
-// }
 
   
 chart.innerHTML = ''
@@ -395,45 +464,47 @@ function chordValidate(chords) {
 
 
 
-//Transpose Button event listener
-// transposeBtn.addEventListener('click', (e) => {
+// Transpose Button event listener
+transposeBtn.addEventListener('click', (e) => {
   
-//   let capoSpot = Number(capoField.value);
+  let capoSpot = Number(capoField.value);
 
-//   if (capoSpot > 12) {
-//     notes2.innerHTML = 'Please pick a lower spot on the guitar neck.'
-//     guitarNeck.style.visibility = 'hidden'
-//     guitarNeck.style.height = '0px';
-//   } else {
-//   neckRun(tuneChoice, capoSpot, 8)
-//   capoExplanation(capoSpot, neck[0])
-//   printNeck();
-//   guitarNeck.style.height = ''
-//   }
-// })
+  if (capoSpot > 12) {
+    notes2.innerHTML = 'Please pick a lower spot on the guitar neck.'
+    guitarNeck.style.visibility = 'hidden'
+    guitarNeck.style.height = '0px';
+  } else {
+  neckRun(tuneChoice, capoSpot, 5)
+  capoExplanation(capoSpot, neck[0])
+  printNeck();
+  guitarNeck.style.height = ''
+  }
+  if (frequencies.length > 0) frequencies = [];
+  
+})
 
-chordBtn.addEventListener('click', (e) => {
-  let clicked = true;
-  let orgChords = chordProg.value
-  let workingChords = 
-  chordValidate(orgChords)
+// chordBtn.addEventListener('click', (e) => {
+//   let clicked = true;
+//   let orgChords = chordProg.value
+//   let workingChords = 
+//   chordValidate(orgChords)
 
-  if (clicked) {
-    capoTitle.innerHTML = `<div class="capospot">Place capo here:</div>
-  <div class="chordtitle">Strum the following chords</div>`
+//   if (clicked) {
+//     capoTitle.innerHTML = `<div class="capospot">Place capo here:</div>
+//   <div class="chordtitle">Strum the following chords</div>`
   
   
-  try{
-    chordExp.style.visibility = 'visible'
-      let songKey = keyLookup(workingChords)
-      let scale = keycheck(songKey)
-      capoSuggest(songKey, workingChords, scale)
+//   try{
+//     chordExp.style.visibility = 'visible'
+//       let songKey = keyLookup(workingChords)
+//       let scale = keycheck(songKey)
+//       capoSuggest(songKey, workingChords, scale)
           
 
-    }catch(err){
+//     }catch(err){
       
-      capoTitle.innerHTML = `Sorry, you need to type in a chord, a set of chords, or something musical. Try again! 🎸🎸`
-      chart.innerHTML = ''
-    }
-  }
-})
+//       capoTitle.innerHTML = `Sorry, you need to type in a chord, a set of chords, or something musical. Try again! 🎸🎸`
+//       chart.innerHTML = ''
+//     }
+//   }
+// })

@@ -141,6 +141,7 @@ label {
   width: 15%;
   overflow: hidden;
   text-align: center;
+  cursor: pointer;
 }
 
 .fretwire {
@@ -228,7 +229,6 @@ label {
 
 .capoSelection .chordchart {
   width: 65%;
-  /* border-left: solid 1px #333; */
   display: flex;
   justify-content: space-around;
 }
